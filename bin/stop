@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ -e .pid ]]; then
+  PID=$(cat .pid)
+  echo "Killing $PID"
+  kill $PID
+  rm .pid
+else
+  echo "Pidfile not found - aborting"
+fi

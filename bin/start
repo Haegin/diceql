@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ -e .pid ]]; then
+  echo "App is already running. Aborting"
+  exit 0
+fi
+
+node app/server.js > access.log 2> error.log &
+PID=$!
+echo $PID > .pid
+docker-compose up -d

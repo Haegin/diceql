@@ -1,0 +1,74 @@
+#!/bin/bash
+
+rootDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+cd "${rootDir}"
+. "${rootDir}/.env"
+
+create() {
+  echo "CREATE DATABASE \"${POSTGRES_DB}\"" | psql --host ${POSTGRES_HOST} -U ${POSTGRES_USER} postgres
+}
+
+drop() {
+  echo "DROP DATABASE IF EXISTS \"${POSTGRES_DB}\"" | psql --host ${POSTGRES_HOST} -U ${POSTGRES_USER} postgres
+}
+
+migrate() {
+  subcommand=$1
+  shift
+  case "$subcommand" in
+    make)
+      debug=knex:* yarn knex migrate:make "$@"
+      ;;
+    rollback)
+      debug=knex:* yarn knex migrate:rollback "$@"
+      ;;
+    *)
+      debug=knex:* yarn knex migrate:latest
+  esac
+}
+
+seed() {
+  subcommand=$1
+  shift
+  case "$subcommand" in
+    make)
+      debug=knex:* yarn knex seed:make "$@"
+      ;;
+    *)
+      debug=knex:* yarn knex seed:run "$@"
+  esac
+}
+
+console() {
+  psql -U ${POSTGRES_USER} --host ${POSTGRES_HOST} ${POSTGRES_DB}
+}
+
+if [[ $NODE_ENV = 'test' ]]; then
+  POSTGRES_DB="${POSTGRES_DB}-test"
+fi
+
+command=$1
+shift
+
+case "$command" in
+  create)
+    create
+    ;;
+  drop)
+    drop
+    ;;
+  migrate)
+    migrate "$@"
+    ;;
+  seed)
+    seed "$@"
+    ;;
+  reset)
+    drop && create && migrate && seed
+    ;;
+  console)
+    console "$@"
+    ;;
+  *)
+    echo "Usage: $0 {create|drop|migrate|seed|reset}"
+esac

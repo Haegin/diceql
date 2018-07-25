@@ -1,0 +1,15 @@
+/Users/harry/dev/hlb/diceql/app/roller.js:1
+(function (exports, require, module, __filename, __dirname) { const MATCH_REGEX = /(?<count>\d*)d(?<size>\d*)/
+                                                                                  ^
+
+SyntaxError: Invalid regular expression: /(?<count>\d*)d(?<size>\d*)/: Invalid group
+    at Object.<anonymous> (/Users/harry/dev/hlb/diceql/app/roller.js:1:83)
+    at Module._compile (module.js:649:30)
+    at Object.Module._extensions..js (module.js:660:10)
+    at Module.load (module.js:561:32)
+    at tryModuleLoad (module.js:501:12)
+    at Function.Module._load (module.js:493:3)
+    at Module.require (module.js:593:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (/Users/harry/dev/hlb/diceql/app/gql/index.js:12:16)
+    at Module._compile (module.js:649:30)
